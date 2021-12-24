@@ -7,7 +7,7 @@ import colors from './utils/style/color'
 import Home from './pages/Home'
 import Survey from './pages/Survey'
 import Header from "./components/Header"
-import Error from './components/Error'
+import Error from './pages/Error'
 import Results from './pages/Results'
 import Freelances from './pages/Freelances'
 
@@ -28,12 +28,18 @@ const GlobalStyle = createGlobalStyle`
   div {
     font-family: 'Trebuchet MS', Helvetica, sans-serif;
   }
+  .page {
+    position: relative;
+    top: 100px;
+    left: 0px;
+    margin: 0px 35px 0px 35px;
+  }
 
-  .borderBoxSizing{
+  .borderBoxSizing {
     border-box: border-box;
   }
 
-  .navItem{
+  .navItem {
     padding: 15px;
     margin: 0px 10px 0px 10px;
     color: '#8186a0';
@@ -41,7 +47,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 18px;
   }
 
-  .fullLink{
+  .fullLink {
     color: white; 
     border-radius:30px;
     background-color: ${colors.primary};
