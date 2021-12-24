@@ -1,5 +1,6 @@
 import DefaultPicture from "../../assets/profile.png"
-import "../../styles/Card.css"
+import colors from "../../utils/style/color"
+
 import PropTypes from 'prop-types'
 import styled from "styled-components"
 
@@ -13,13 +14,26 @@ const CardImage = styled.img`
     width: 80px;
     border-radius: 50%;
 `
+const CardWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    background-color: ${colors.backgroundLight};
+    border-radius: 30px;
+    width: 350px;
+    transition: 200ms;
+    &:hover {
+        cursor: pointer;
+        box-shadow: 2px 2px 10px #e2e3e9;
+    }
+`
 export default function Card({ label, title, picture }) {
     return (
-        <div className="lmj-card">
+        <CardWrapper>
             <span>{label}</span>
             <CardImage src={picture} alt="freelance" />
             <CardLabel>{title}</CardLabel>
-        </div>
+        </CardWrapper>
     )
 }
 
