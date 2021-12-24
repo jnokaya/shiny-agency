@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
-import colors from './utils/style/color'
+import colors from './utils/style/colors'
 
 import Home from './pages/Home'
 import Survey from './pages/Survey'
@@ -42,7 +42,7 @@ const GlobalStyle = createGlobalStyle`
   .navItem {
     padding: 15px;
     margin: 0px 10px 0px 10px;
-    color: '#8186a0';
+    color: ${colors.subTitleGrey};
     text-decoration: none;
     font-size: 18px;
   }
