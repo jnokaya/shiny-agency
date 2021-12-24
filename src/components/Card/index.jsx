@@ -1,13 +1,14 @@
 import DefaultPicture from "../../assets/profile.png"
-import colors from "../../utils/style/color"
+import colors from "../../utils/style/colors"
 
 import PropTypes from 'prop-types'
 import styled from "styled-components"
 
 const CardLabel = styled.span`
-    color: #5843e4;
+    color: ${colors.primary};
     font-size: 22px;
     font-weight: bold;
+    align-self: start;
 `
 const CardImage = styled.img`
     height: 80px;
@@ -21,6 +22,8 @@ const CardWrapper = styled.div`
     background-color: ${colors.backgroundLight};
     border-radius: 30px;
     width: 350px;
+    align-items: center;
+    justify-content: space-between;
     transition: 200ms;
     &:hover {
         cursor: pointer;
@@ -30,9 +33,9 @@ const CardWrapper = styled.div`
 export default function Card({ label, title, picture }) {
     return (
         <CardWrapper>
-            <span>{label}</span>
+            <CardLabel>{label}</CardLabel>
             <CardImage src={picture} alt="freelance" />
-            <CardLabel>{title}</CardLabel>
+            <h1>{title}</h1>
         </CardWrapper>
     )
 }
