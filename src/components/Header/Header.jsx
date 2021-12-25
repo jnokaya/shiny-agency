@@ -17,7 +17,8 @@ const HeaderContainer = styled.div.attrs(props => ({className: 'borderBoxSizing'
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    z-index: 20000;
+    z-index: 2000;
+    background-color: white;
 `
 const LeftContent = styled.div`
     display: flex;
