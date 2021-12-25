@@ -18,7 +18,6 @@ const HomeRightContainer = styled.div.attrs(props => ({ className: 'borderBoxSiz
   width: 35%;
   align-items: center;
   display: flex;
-  align-items: center;
   justify-content: center;
 `
 const HomeText = styled.div`

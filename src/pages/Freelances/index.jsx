@@ -1,33 +1,17 @@
-import DefaultPicture from "../../assets/profile.png"
 import Card from "../../components/Card"
 import styled from "styled-components"
 import colors from "../../utils/style/colors"
+import { Loader } from "../../utils/style/Atoms"
+import ErrorPopup from "../../components/ErrorPopup"
+import { useState, useEffect } from "react"
 
-const freelanceProfiles = [
-    {
-        name: 'Jane Doe',
-        jobTitle: 'Devops',
-        picture: DefaultPicture,
-    },
-    {
-        name: 'John Doe',
-        jobTitle: 'Developpeur frontend',
-        picture: DefaultPicture,
-    },
-    {
-        name: 'Jeanne Biche',
-        jobTitle: 'Développeuse Fullstack',
-        picture: DefaultPicture,
-    },
-]
-
-const FreelancesContainer = styled.div.attrs(props=>({className: 'page borderBoxSizing'}))`
-    margin: 0 25% 0 25%;
-    padding: 50px 0 0 0;
+const FreelancesContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
+    padding: 50px 25% 0 25%;
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: space-around;
+    align-items: center;
 `
 
 const StyledH2 = styled.h2`
@@ -43,15 +27,42 @@ const CardsContainer = styled.div`
     grid-template-columns: repeat(2, 1fr);
 `
 export default function Freelances() {
+    const [freelanceProfiles, setFreelanceProfiles] = useState([])
+    const [dataLoading, setDataLoading] = useState(false)
+    const [isError, setError] = useState(false)
+
+    useEffect(() => {
+        setDataLoading(true)
+        fetch(`http://localhost:8000/freelances`)
+            .then(response => response.json())
+            .then(({ freelancersList }) => {
+                setFreelanceProfiles([...freelancersList])
+                setDataLoading(false)
+            })
+            .catch((error) => {
+                setError(true)
+            })
+    }, [])
+
     return (
-        <FreelancesContainer>
-            <h1>Trouvez votre prestataire</h1>
-            <StyledH2>Chez Shiny nous réunissons les meilleurs profils pour vous</StyledH2>
-            <CardsContainer>
-                {freelanceProfiles.map(({ name, jobTitle, picture }, index) => (
-                    <Card key={`${name}-${index}`} label={jobTitle} picture={picture} title={name} />
-                ))}
-            </CardsContainer>
-        </FreelancesContainer>
+        isError ? (
+            <ErrorPopup />
+        ) : (
+            <FreelancesContainer>
+                <h1>Trouvez votre prestataire</h1 >
+                <StyledH2>Chez Shiny nous réunissons les meilleurs profils pour vous</StyledH2>
+                {
+                    dataLoading ? (
+                        <Loader />
+                    ) : (
+                        <CardsContainer>
+                            {freelanceProfiles.map(({ name, job, picture }, index) => (
+                                <Card key={`${name}-${index}`} label={job} picture={picture} title={name} />
+                            ))}
+                        </CardsContainer>
+                    )
+                }
+            </FreelancesContainer >
+        )
     )
 }
