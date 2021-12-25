@@ -22,8 +22,7 @@ const freelanceProfiles = [
 ]
 
 const FreelancesContainer = styled.div.attrs(props=>({className: 'page borderBoxSizing'}))`
-    margin: 0 25% 0 25%;
-    padding: 50px 0 0 0;
+    padding: 50px 25% 0 25%;
     display: flex;
     flex-direction: column;
     text-align: center;
