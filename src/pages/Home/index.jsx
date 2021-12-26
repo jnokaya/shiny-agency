@@ -20,12 +20,12 @@ const HomeRightContainer = styled.div.attrs(props => ({ className: 'borderBoxSiz
   display: flex;
   justify-content: center;
 `
+
 const HomeText = styled.div`
   font-style: normal;
   font-weight: bold;
   font-size: 50px;
   line-height: 160.5%;
-  color: black;
   width: 100%;
 `
 const HomeLink = styled(Link).attrs(props => ({ className: 'navItem fullLink' }))`
