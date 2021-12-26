@@ -1,4 +1,6 @@
 import DefaultPicture from "../../assets/profile.png"
+import { useContext } from "react"
+import { ThemeContext } from "../../utils/context"
 import colors from "../../utils/style/colors"
 
 import PropTypes from 'prop-types'
@@ -18,8 +20,8 @@ const CardImage = styled.img`
 const CardWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 15px;
-    background-color: ${colors.backgroundLight};
+    padding: 20px;
+    background-color: ${({ $isDarkMode }) => $isDarkMode ? colors.backgroundDark : colors.backgroundLight};
     border-radius: 30px;
     width: 350px;
     align-items: center;
@@ -27,12 +29,13 @@ const CardWrapper = styled.div`
     transition: 200ms;
     &:hover {
         cursor: pointer;
-        box-shadow: 2px 2px 10px #e2e3e9;
+        box-shadow: 2px 2px 10px ${({ $isDarkMode }) => $isDarkMode ? '#272638' : '#E2E3E9'};
     }
 `
 export default function Card({ label, title, picture }) {
+    const { theme } = useContext(ThemeContext)
     return (
-        <CardWrapper>
+        <CardWrapper $isDarkMode={theme === 'dark'}>
             <CardLabel>{label}</CardLabel>
             <CardImage src={picture} alt="freelance" />
             <h1>{title}</h1>
