@@ -12,7 +12,8 @@ const StyledLink = styled(Link).attrs((props) => {
 })`
     
 `
-const HeaderContainer = styled.div.attrs(props => ({ className: 'borderBoxSizing' }))`
+const HeaderContainer = styled.div.attrs(props => ({ 
+    className: 'borderBoxSizing' }))`
     position: sticky;
     top: 0px;
     width: -webkit-fill-available;
