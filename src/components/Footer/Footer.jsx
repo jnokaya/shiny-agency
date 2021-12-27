@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import colors from '../../utils/style/colors'
-import { useContext } from 'react'
-import { ThemeContext } from '../../utils/context'
+import { useTheme } from '../../utils/hooks'
 
 const FooterContainer = styled.footer`
     display: flex;
@@ -16,14 +15,14 @@ const NightModeButton = styled.button`
     background-color: transparent;
     border: none;
     cursor: pointer;
-    color: ${colors.secondary};
+    color: ${({ $isDarkMode }) => $isDarkMode ? 'white' : colors.secondary};
 `
 
 export default function Footer() {
-    const { toggleTheme } = useContext(ThemeContext)
+    const { theme, toggleTheme } = useTheme()
     return (
         <FooterContainer>
-            <NightModeButton onClick={() => toggleTheme()}>Changer de mode</NightModeButton>
+            <NightModeButton onClick={() => toggleTheme()} $isDarkMode={theme === 'light' ? false : true}>Changer de mode à <strong>{theme === 'light' ? `nuit` : `jour`}</strong></NightModeButton>
         </FooterContainer>
     )
 }
