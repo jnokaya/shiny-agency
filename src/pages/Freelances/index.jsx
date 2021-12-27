@@ -4,6 +4,7 @@ import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
 import ErrorPopup from "../../components/ErrorPopup"
 import { useState, useEffect } from "react"
+import { useFetch } from "../../utils/hooks"
 
 const FreelancesContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
     padding: 50px 25% 0 25%;
@@ -27,36 +28,21 @@ const CardsContainer = styled.div`
     grid-template-columns: repeat(2, 1fr);
 `
 export default function Freelances() {
-    const [freelanceProfiles, setFreelanceProfiles] = useState([])
-    const [dataLoading, setDataLoading] = useState(false)
-    const [isError, setError] = useState(false)
-
-    useEffect(() => {
-        setDataLoading(true)
-        fetch(`http://localhost:8000/freelances`)
-            .then(response => response.json())
-            .then(({ freelancersList }) => {
-                setFreelanceProfiles([...freelancersList])
-                setDataLoading(false)
-            })
-            .catch((error) => {
-                setError(true)
-            })
-    }, [])
-
+    const { data, isLoading, error } = useFetch(`http://localhost:8000/freelances`)
+    const { freelancersList } = data
     return (
-        isError ? (
+        error ? (
             <ErrorPopup />
         ) : (
             <FreelancesContainer>
                 <h1>Trouvez votre prestataire</h1 >
                 <StyledH2>Chez Shiny nous réunissons les meilleurs profils pour vous</StyledH2>
                 {
-                    dataLoading ? (
+                    isLoading ? (
                         <Loader />
                     ) : (
                         <CardsContainer>
-                            {freelanceProfiles.map(({ name, job, picture }, index) => (
+                            {freelancersList.map(({ name, job, picture }, index) => (
                                 <Card key={`${name}-${index}`} label={job} picture={picture} title={name} />
                             ))}
                         </CardsContainer>
