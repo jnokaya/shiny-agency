@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import styled from "styled-components"
 import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
 import { useContext } from "react"
 import { ThemeContext, SurveyContext } from "../../utils/context"
+import { useFetch } from '../../utils/hooks'
+import ErrorPopup from "../../components/ErrorPopup/ErrorPopup"
 
 const SurveyContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
   display: flex;
@@ -58,32 +59,24 @@ const ReplyWrapper = styled.div`
 export default function Survey() {
   let { questionNumber } = useParams()
   questionNumber = Number.parseInt(questionNumber)
-  const [questions, setQuestions] = useState({})
-  const [isDataLoading, setDataLoading] = useState(false)
+
   const { theme } = useContext(ThemeContext)
   const { answers, saveAnswers } = useContext(SurveyContext)
 
   function saveReply(answer) {
     saveAnswers({ [questionNumber]: answer })
   }
-  
-  useEffect(() => {
-    setDataLoading(true)
-    fetch(`http://localhost:8000/survey`)
-      .then((response) => response.json())
-      .then(({ surveyData }) => {
-        setQuestions({ ...surveyData })
-        setDataLoading(false)
-      })
-      .catch((error) => console.log(error))
-  }, [])
+
+  const { data, isLoading, error } = useFetch('http://localhost:8000/survey')
+  const { surveyData } = data
+  if (error) return (<ErrorPopup />)
   return (
     <SurveyContainer>
       <QuestionTitle>Question {questionNumber}</QuestionTitle>
-      {isDataLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
-        <QuestionContent>{questions[questionNumber]}</QuestionContent>
+        <QuestionContent>{surveyData && surveyData[questionNumber]}</QuestionContent>
       )}
       <ReplyWrapper>
         <ReplyBox
@@ -101,7 +94,7 @@ export default function Survey() {
       </ReplyWrapper>
       <LinkWrapper $isDarkMode={theme === 'dark'}>
         {questionNumber >= 1 && (<Link to={`/survey/${questionNumber - 1}`}>Question précédente</Link>)}
-        {questions[questionNumber + 1] ? (
+        {surveyData && surveyData[questionNumber + 1] ? (
           <Link to={`/survey/${questionNumber + 1}`}>Question suivante</Link>
         ) : (
           <Link to="/results">Résultats</Link>
