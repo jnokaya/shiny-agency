@@ -4,6 +4,7 @@ import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
 import ErrorPopup from "../../components/ErrorPopup"
 import { useFetch } from "../../utils/hooks"
+import { useTheme } from "../../utils/hooks"
 
 const FreelancesContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
     padding: 50px 25% 0 25%;
@@ -29,6 +30,7 @@ const CardsContainer = styled.div`
 export default function Freelances() {
     const { data, isLoading, error } = useFetch(`http://localhost:8000/freelances`)
     const { freelancersList } = data
+    const { theme } = useTheme()
     return (
         error ? (
             <ErrorPopup />
@@ -42,7 +44,7 @@ export default function Freelances() {
                     ) : (
                         <CardsContainer>
                             {freelancersList.map(({ name, job, picture }, index) => (
-                                <Card key={`${name}-${index}`} label={job} picture={picture} title={name} />
+                                <Card key={`${name}-${index}`} label={job} picture={picture} title={name} theme={theme} />
                             ))}
                         </CardsContainer>
                     )
