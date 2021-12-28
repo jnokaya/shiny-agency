@@ -9,6 +9,7 @@ import Header from "./components/Header"
 import Error from './pages/Error'
 import Results from './pages/Results'
 import Freelances from './pages/Freelances'
+import Profile from './pages/Profile'
 import Footer from './components/Footer'
 import { SurveyProvider, ThemeProvider } from './utils/context'
 
@@ -24,6 +25,7 @@ ReactDOM.render(
             <Route path="/survey/:questionNumber" element={<Survey />} />
             <Route path="/results" element={<Results />} />
             <Route path="/freelances" element={<Freelances />} />
+            <Route path="/profile/:id" element={<Profile />} render={props => <Profile {...props} />} />
             <Route path="*" element={<Error />} />
           </Routes>
           <Footer />

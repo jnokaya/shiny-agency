@@ -5,6 +5,7 @@ import { Loader } from "../../utils/style/Atoms"
 import ErrorPopup from "../../components/ErrorPopup"
 import { useFetch } from "../../utils/hooks"
 import { useTheme } from "../../utils/hooks"
+import { Link } from "react-router-dom"
 
 const FreelancesContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
     padding: 50px 25% 0 25%;
@@ -43,8 +44,10 @@ export default function Freelances() {
                         <Loader data-testid="loader" />
                     ) : (
                         <CardsContainer>
-                            {freelancersList.map(({ name, job, picture }, index) => (
-                                <Card key={`${name}-${index}`} label={job} picture={picture} title={name} theme={theme} />
+                            {freelancersList.map(({ name, job, picture, id }, index) => (
+                                <Link to={`/profile/${id}`} key={`${name}-${index}`}>
+                                    <Card label={job} picture={picture} title={name} theme={theme} />
+                                </Link>
                             ))}
                         </CardsContainer>
                     )
