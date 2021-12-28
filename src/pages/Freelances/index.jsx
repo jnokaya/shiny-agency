@@ -5,6 +5,7 @@ import { Loader } from "../../utils/style/Atoms"
 import ErrorPopup from "../../components/ErrorPopup"
 import { useFetch } from "../../utils/hooks"
 import { useTheme } from "../../utils/hooks"
+import { Link } from "react-router-dom"
 
 const FreelancesContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
     padding: 50px 25% 0 25%;
@@ -27,6 +28,10 @@ const CardsContainer = styled.div`
     grid-template-rows: 350px 350px;
     grid-template-columns: repeat(2, 1fr);
 `
+const CustomizedLink = styled(Link)`
+    text-decoration: none;
+    height: -webkit-fill-available;
+`
 export default function Freelances() {
     const { data, isLoading, error } = useFetch(`http://localhost:8000/freelances`)
     const { freelancersList } = data
@@ -43,8 +48,10 @@ export default function Freelances() {
                         <Loader data-testid="loader" />
                     ) : (
                         <CardsContainer>
-                            {freelancersList.map(({ name, job, picture }, index) => (
-                                <Card key={`${name}-${index}`} label={job} picture={picture} title={name} theme={theme} />
+                            {freelancersList.map(({ name, job, picture, id }, index) => (
+                                <CustomizedLink to={`/profile/${id}`} key={`${name}-${index}`}>
+                                    <Card label={job} picture={picture} title={name} theme={theme} />
+                                </CustomizedLink>
                             ))}
                         </CardsContainer>
                     )
