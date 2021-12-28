@@ -41,6 +41,7 @@ export default class Card extends Component {
             background-color: ${({ $isDarkMode }) => $isDarkMode ? colors.backgroundDark : colors.backgroundLight};
             border-radius: 30px;
             width: 350px;
+            height: -webkit-fill-available;
             align-items: center;
             justify-content: space-between;
             transition: 200ms;

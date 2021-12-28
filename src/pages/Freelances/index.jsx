@@ -28,6 +28,10 @@ const CardsContainer = styled.div`
     grid-template-rows: 350px 350px;
     grid-template-columns: repeat(2, 1fr);
 `
+const CustomizedLink = styled(Link)`
+    text-decoration: none;
+    height: -webkit-fill-available;
+`
 export default function Freelances() {
     const { data, isLoading, error } = useFetch(`http://localhost:8000/freelances`)
     const { freelancersList } = data
@@ -45,9 +49,9 @@ export default function Freelances() {
                     ) : (
                         <CardsContainer>
                             {freelancersList.map(({ name, job, picture, id }, index) => (
-                                <Link to={`/profile/${id}`} key={`${name}-${index}`}>
+                                <CustomizedLink to={`/profile/${id}`} key={`${name}-${index}`}>
                                     <Card label={job} picture={picture} title={name} theme={theme} />
-                                </Link>
+                                </CustomizedLink>
                             ))}
                         </CardsContainer>
                     )
