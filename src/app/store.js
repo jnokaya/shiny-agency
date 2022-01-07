@@ -2,11 +2,12 @@ import { combineReducers, createStore } from "redux";
 import { default as themeReducer } from "../features/theme/theme.reducer";
 import { default as freelancesReducer } from '../features/freelances/freelances.reducer'
 import { default as freelanceReducer } from '../features/freelance/freelance.reducer'
-
+import { default as surveyReducer } from '../features/survey/survey.reducer'
 let reducer = combineReducers({
     theme: themeReducer,
     freelances: freelancesReducer,
-    freelance: freelanceReducer
+    freelance: freelanceReducer,
+    survey: surveyReducer
 })
 
 //debug tool

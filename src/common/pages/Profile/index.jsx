@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom"
 import { fetchFreelance } from "../../../features/freelance/freelance.reducer"
 import { selectFreelance, selectTheme } from "../../utils/selector"
 import { STATUS } from '../../../features/freelances/freelances.reducer'
+import surveyReducer from '../../../features/survey/survey.reducer'
 
 const ProfileWrapper = styled.div`
   display: flex;
@@ -99,7 +100,7 @@ export default function Profile() {
         fetchFreelance(store, queryId)
     }, [store, queryId])
     const freelance = useSelector(selectFreelance(queryId))
-    const isLoading = [STATUS[0], STATUS[1], STATUS[4]].indexOf(freelance.status) >= 0
+    const isLoading = [STATUS[0], STATUS[1], STATUS[4]].indexOf(freelance.status) >= 0 && surveyReducer.data
     const error = freelance.status === STATUS[3]
     const { picture, name, location, tjm, job, skills, available, id } = freelance.data ? freelance.data.freelanceData : {}
 
