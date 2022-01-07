@@ -1,8 +1,10 @@
 import { combineReducers, createStore } from "redux";
-import { darkThemeReducer } from "../features/theme/theme.reducer";
+import { default as themeReducer } from "../features/theme/theme.reducer";
+import { default as freelancesReducer } from '../features/freelances/freelances.reducer'
 
 let reducer = combineReducers({
-    theme: darkThemeReducer
+    theme: themeReducer,
+    freelances: freelancesReducer
 })
 
 //debug tool

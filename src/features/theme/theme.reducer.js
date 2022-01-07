@@ -10,8 +10,10 @@ export const setTheme = (theme) => {
 }
 
 // reducer : the substate here is the theme (string)
-export const darkThemeReducer = (state = THEMES.LIGHT, action) => {
+const themeReducer = (state = THEMES.LIGHT, action) => {
     if (action.type === 'setTheme' && (action.payload || Object.values(THEMES).indexOf(action.payload) >= 0))
         return action.payload
     return state
 }
+
+export default themeReducer
