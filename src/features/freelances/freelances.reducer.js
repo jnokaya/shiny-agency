@@ -13,14 +13,11 @@ export const STATUS = {
     3: 'rejected',
     4: 'updating',
 }
-const API = {
+export const API = {
     SERVER: {
         PROTOCOL: 'http',
         DOMAIN: 'localhost',
         PORT: 8000
-    },
-    URI: {
-        FREELANCES: '/freelances'
     }
 }
 
@@ -29,7 +26,7 @@ const freelancesFetching = () => ({ type: ACTIONS.FETCHING })
 const freelancesResolved = (data) => ({ type: ACTIONS.RESOLVED, payload: data })
 const freelancesRejected = (error) => ({ type: ACTIONS.REJECTED, payload: error })
 export const fetchFreelances = (store) => {
-    const endpoint = setEndpoint(API.SERVER, API.URI.FREELANCES)
+    const endpoint = setEndpoint(API.SERVER, '/freelances')
     try {
         store.dispatch(freelancesFetching())
         fetch(endpoint)
@@ -39,7 +36,7 @@ export const fetchFreelances = (store) => {
         store.dispatch(freelancesRejected(error))
     }
 }
-const setEndpoint = (server, uri) => `${server.PROTOCOL}://${server.DOMAIN}${server.PORT ? `:${server.PORT}` : ''}${uri}`
+export const setEndpoint = (server, uri) => `${server.PROTOCOL}://${server.DOMAIN}${server.PORT ? `:${server.PORT}` : ''}${uri}`
 
 //initial state
 const initialState = {
