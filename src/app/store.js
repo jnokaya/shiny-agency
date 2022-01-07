@@ -1,10 +1,14 @@
 import { combineReducers, createStore } from "redux";
 import { darkThemeReducer } from "../features/darkMode/theme";
 
-const reducer = combineReducers({
+let reducer = combineReducers({
     darkMode: darkThemeReducer
 })
-export const store = createStore(reducer)
+
+//debug tool
+const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+
+export const store = createStore(reducer, reduxDevtools)
 
 store.subscribe(() => {
     console.log("Nouveau state:")

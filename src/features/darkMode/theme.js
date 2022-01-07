@@ -9,15 +9,15 @@ export const setTheme = (theme) => {
 }
 
 // selectors
-export const selectTheme = state => state.darkMode.theme ? state.darkMode.theme : LIGHT_THEME 
+export const selectTheme = state => state.darkMode.theme
 
 // initial state
 const initialState = {
     theme: LIGHT_THEME
 }
 // reducer
-export function darkThemeReducer(state = initialState, action) {
-    if (action.type = 'theme')
+export const darkThemeReducer = (state = initialState, action) => {
+    if (action.type = 'theme' && action.payload)
         return { ...state, theme: action.payload }
     return state
 }
