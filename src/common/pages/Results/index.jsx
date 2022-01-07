@@ -5,7 +5,8 @@ import colors from '../../utils/style/colors'
 import { useFetch } from '../../utils/hooks'
 import { StyledLink, Loader } from '../../utils/style/Atoms'
 import { useSelector } from 'react-redux'
-import { selectTheme } from '../../../features/darkMode/theme'
+import { selectTheme } from '../../utils/selector'
+import EmptyList from '../../components/EmptyList'
 
 const ResultsContainer = styled.div`
   display: flex;
@@ -85,7 +86,7 @@ function Results() {
     }
 
     const resultsData = data?.resultsData
-
+    if (resultsData?.length < 1) return (<EmptyList theme={theme} />)
     return isLoading ? (
         <LoaderWrapper>
             <Loader data-testid="loader" />

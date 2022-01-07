@@ -1,16 +1,18 @@
 import styled from 'styled-components'
 import { useState } from 'react'
 import colors from '../../utils/style/colors'
-import { useTheme } from '../../utils/hooks'
+import { useSelector } from 'react-redux'
+import { selectTheme } from '../../utils/selector'
 
 const InputWrapper = styled.div`
   color: ${({ theme }) => (theme === 'light' ? colors.dark : 'white')};
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 `
 
 const StyledLabel = styled.label`
   color: ${({ theme }) => (theme === 'light' ? colors.dark : 'white')};
+  padding: 5px;
 `
 
 const StyledInput = styled.input`
@@ -24,17 +26,16 @@ const StyledInput = styled.input`
 `
 
 export default function EmailInput() {
-    const [inputValue, updateInputValue] = useState('')
-    const { theme } = useTheme()
-
-    return (
-        <InputWrapper theme={theme}>
-            <StyledLabel theme={theme}>Adresse Email</StyledLabel>
-            <StyledInput
-                theme={theme}
-                onChange={(e) => updateInputValue(e.target.value)}
-            />
-            {inputValue}
-        </InputWrapper>
-    )
+  const [inputValue, updateInputValue] = useState('')
+  const theme = useSelector(selectTheme)
+  return (
+    <InputWrapper theme={theme}>
+      <StyledLabel theme={theme}>Adresse Email</StyledLabel>
+      <StyledInput
+        theme={theme}
+        onChange={(e) => updateInputValue(e.target.value)}
+        value={inputValue}
+      />
+    </InputWrapper>
+  )
 }

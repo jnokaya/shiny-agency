@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import colors from '../../common/utils/style/colors'
-import { selectTheme, setTheme, DARK_THEME, LIGHT_THEME } from './theme'
+import { setTheme, THEMES } from './theme.reducer'
+import { selectTheme } from '../../common/utils/selector'
 
 const Button = styled.button`
 background-color: transparent;
@@ -15,9 +16,9 @@ export default function DarkModeButton() {
     const dispatch = useDispatch()
     return (
         <Button
-            onClick={() => { dispatch(setTheme(theme === DARK_THEME ? LIGHT_THEME : DARK_THEME)) }}
-            $isDarkMode={theme === 'light' ? false : true}>
-            Changer de mode à <strong>{theme === 'light' ? `nuit` : `jour`}</strong>
+            onClick={() => { dispatch(setTheme(theme === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK)) }}
+            $isDarkMode={theme === THEMES.LIGHT ? false : true}>
+            Changer de mode à <strong>{theme === THEMES.LIGHT ? `nuit` : `jour`}</strong>
         </Button>
     )
 }

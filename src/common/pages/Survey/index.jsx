@@ -2,12 +2,14 @@ import { useParams, Link } from "react-router-dom"
 import styled from "styled-components"
 import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { SurveyContext } from "../../utils/context"
 import { useFetch } from '../../utils/hooks'
 import ErrorPopup from "../../components/ErrorPopup/ErrorPopup"
-import { useSelector } from "react-redux"
-import { selectTheme } from "../../../features/darkMode/theme"
+import { useSelector, useStore } from "react-redux"
+import { selectSurvey, selectTheme } from "../../utils/selector"
+import { fetchSurvey } from "../../../features/survey/survey.reducer"
+import { STATUS } from "../../../features/freelances/freelances.reducer"
 
 const SurveyContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
   display: flex;
@@ -61,16 +63,20 @@ const ReplyWrapper = styled.div`
 export default function Survey() {
   let { questionNumber } = useParams()
   questionNumber = Number.parseInt(questionNumber)
-
+  const store = useStore()
+  useEffect(() => {
+    fetchSurvey(store)
+  }, [store])
   const theme = useSelector(selectTheme)
+  const survey = useSelector(selectSurvey)
+  const surveyData = survey.data?.surveyData
   const { answers, saveAnswers } = useContext(SurveyContext)
-
   function saveReply(answer) {
     saveAnswers({ [questionNumber]: answer })
   }
 
-  const { data, isLoading, error } = useFetch('http://localhost:8000/survey')
-  const { surveyData } = data
+  const isLoading = [STATUS[0], STATUS[1]].indexOf(survey.status) >= 0
+  const error = survey.status === STATUS[3]
   if (error) return (<ErrorPopup />)
   return (
     <SurveyContainer>

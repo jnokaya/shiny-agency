@@ -2,8 +2,7 @@ import { createGlobalStyle } from "styled-components"
 import { useSelector } from "react-redux"
 
 import colors from "./colors"
-import { DARK_THEME, selectTheme } from "../../../features/darkMode/theme"
-
+import { selectTheme } from "../selector"
 const StyledGlobalStyle = createGlobalStyle`
   html{
     box-sizing: border-box;
@@ -57,5 +56,5 @@ const StyledGlobalStyle = createGlobalStyle`
 
 export default function GlobalStyle() {
   const theme = useSelector(selectTheme)
-  return <StyledGlobalStyle $isDarkMode={theme === DARK_THEME} />
+  return <StyledGlobalStyle $isDarkMode={theme === 'dark'} />
 }

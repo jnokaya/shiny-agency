@@ -1,10 +1,19 @@
 import { combineReducers, createStore } from "redux";
-import { darkThemeReducer } from "../features/darkMode/theme";
-
-const reducer = combineReducers({
-    darkMode: darkThemeReducer
+import { default as themeReducer } from "../features/theme/theme.reducer";
+import { default as freelancesReducer } from '../features/freelances/freelances.reducer'
+import { default as freelanceReducer } from '../features/freelance/freelance.reducer'
+import { default as surveyReducer } from '../features/survey/survey.reducer'
+let reducer = combineReducers({
+    theme: themeReducer,
+    freelances: freelancesReducer,
+    freelance: freelanceReducer,
+    survey: surveyReducer
 })
-export const store = createStore(reducer)
+
+//debug tool
+const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+
+export const store = createStore(reducer, reduxDevtools)
 
 store.subscribe(() => {
     console.log("Nouveau state:")
