@@ -5,7 +5,7 @@ import { Loader } from '../../utils/style/Atoms'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { selectTheme } from '../../../features/darkMode/theme'
+import { selectTheme } from '../../utils/selector'
 
 const ProfileWrapper = styled.div`
   display: flex;

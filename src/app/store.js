@@ -1,8 +1,8 @@
 import { combineReducers, createStore } from "redux";
-import { darkThemeReducer } from "../features/darkMode/theme";
+import { darkThemeReducer } from "../features/theme/theme.reducer";
 
 let reducer = combineReducers({
-    darkMode: darkThemeReducer
+    theme: darkThemeReducer
 })
 
 //debug tool

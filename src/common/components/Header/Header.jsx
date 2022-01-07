@@ -1,14 +1,11 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
-import { useContext } from "react"
-import { ThemeContext } from "../../utils/context"
 import colors from "../../utils/style/colors"
 
 import DarkLogoImageSrc from "../../../assets/dark-logo.png"
 import LightLogoImageSrc from "../../../assets/light-logo.png"
 import { useSelector } from "react-redux"
-import { selectTheme } from "../../../features/darkMode/theme"
-
+import { selectTheme } from '../../utils/selector'
 const StyledLink = styled(Link).attrs((props) => {
     return { className: `navItem ${props.$isFullLink ? 'fullLink' : ''}` }
 })`

@@ -5,7 +5,7 @@ import colors from '../../utils/style/colors'
 import { useFetch } from '../../utils/hooks'
 import { StyledLink, Loader } from '../../utils/style/Atoms'
 import { useSelector } from 'react-redux'
-import { selectTheme } from '../../../features/darkMode/theme'
+import { selectTheme } from '../../utils/selector'
 
 const ResultsContainer = styled.div`
   display: flex;

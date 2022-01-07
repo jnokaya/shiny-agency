@@ -7,7 +7,7 @@ import { SurveyContext } from "../../utils/context"
 import { useFetch } from '../../utils/hooks'
 import ErrorPopup from "../../components/ErrorPopup/ErrorPopup"
 import { useSelector } from "react-redux"
-import { selectTheme } from "../../../features/darkMode/theme"
+import { selectTheme } from "../../utils/selector"
 
 const SurveyContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
   display: flex;

@@ -6,7 +6,7 @@ import ErrorPopup from "../../components/ErrorPopup"
 import { useFetch } from "../../utils/hooks"
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { selectTheme } from "../../../features/darkMode/theme"
+import { selectTheme } from "../../utils/selector"
 
 const FreelancesContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
     padding: 50px 25% 0 25%;
