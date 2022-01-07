@@ -1,5 +1,5 @@
 
-import Error404ImageSrc from "../../assets/404.svg"
+import Error404ImageSrc from "../../../assets/404.svg"
 import styled from "styled-components"
 
 const ErrorPageContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`

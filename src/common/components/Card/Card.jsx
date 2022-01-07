@@ -1,4 +1,4 @@
-import DefaultPicture from "../../assets/profile.png"
+import DefaultPicture from "../../../assets/profile.png"
 import colors from "../../utils/style/colors"
 
 import PropTypes from 'prop-types'

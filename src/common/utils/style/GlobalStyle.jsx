@@ -1,7 +1,8 @@
 import { createGlobalStyle } from "styled-components"
-import { useContext } from "react"
-import { ThemeContext } from "../context"
+import { useSelector } from "react-redux"
+
 import colors from "./colors"
+import { DARK_THEME, selectTheme } from "../../../features/darkMode/theme"
 
 const StyledGlobalStyle = createGlobalStyle`
   html{
@@ -41,7 +42,7 @@ const StyledGlobalStyle = createGlobalStyle`
   .navItem {
     padding: 15px;
     margin: 0px 10px 0px 10px;
-    color: ${({ $isDarkMode }) => $isDarkMode ? 'white' : 'colors.subTitleGrey'};
+    color: ${({ $isDarkMode }) => $isDarkMode ? 'white' : colors.subTitleGrey};
     text-decoration: none;
     font-size: 18px;
 }
@@ -55,6 +56,6 @@ const StyledGlobalStyle = createGlobalStyle`
 `
 
 export default function GlobalStyle() {
-  const { theme } = useContext(ThemeContext)
-  return <StyledGlobalStyle $isDarkMode={theme === 'dark'} />
+  const theme = useSelector(selectTheme)
+  return <StyledGlobalStyle $isDarkMode={theme === DARK_THEME} />
 }

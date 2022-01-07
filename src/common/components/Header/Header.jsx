@@ -4,16 +4,19 @@ import { useContext } from "react"
 import { ThemeContext } from "../../utils/context"
 import colors from "../../utils/style/colors"
 
-import DarkLogoImageSrc from "../../assets/dark-logo.png"
-import LightLogoImageSrc from "../../assets/light-logo.png"
+import DarkLogoImageSrc from "../../../assets/dark-logo.png"
+import LightLogoImageSrc from "../../../assets/light-logo.png"
+import { useSelector } from "react-redux"
+import { selectTheme } from "../../../features/darkMode/theme"
 
 const StyledLink = styled(Link).attrs((props) => {
     return { className: `navItem ${props.$isFullLink ? 'fullLink' : ''}` }
 })`
     
 `
-const HeaderContainer = styled.div.attrs(props => ({ 
-    className: 'borderBoxSizing' }))`
+const HeaderContainer = styled.div.attrs(props => ({
+    className: 'borderBoxSizing'
+}))`
     position: sticky;
     top: 0px;
     width: -webkit-fill-available;
@@ -40,7 +43,7 @@ const LogoImage = styled.img.attrs(({ $isDarkMode }) => {
 `
 
 export default function Header() {
-    const { theme } = useContext(ThemeContext)
+    const theme = useSelector(selectTheme)
     return (
         <HeaderContainer $isDarkMode={theme === 'dark'}>
             <LeftContent>

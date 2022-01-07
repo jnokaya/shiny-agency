@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
-import HomeImage from "../../assets/home-illustration.svg"
+import HomeImage from "../../../assets/home-illustration.svg"
 const HomeContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
   padding: 5% 5% 0% 5%;
   display:flex;
