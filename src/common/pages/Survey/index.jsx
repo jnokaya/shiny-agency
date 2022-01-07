@@ -4,8 +4,10 @@ import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
 import { useContext } from "react"
 import { SurveyContext } from "../../utils/context"
-import { useFetch, useTheme } from '../../utils/hooks'
+import { useFetch } from '../../utils/hooks'
 import ErrorPopup from "../../components/ErrorPopup/ErrorPopup"
+import { useSelector } from "react-redux"
+import { selectTheme } from "../../../features/darkMode/theme"
 
 const SurveyContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
   display: flex;
@@ -60,7 +62,7 @@ export default function Survey() {
   let { questionNumber } = useParams()
   questionNumber = Number.parseInt(questionNumber)
 
-  const { theme } = useTheme()
+  const theme = useSelector(selectTheme)
   const { answers, saveAnswers } = useContext(SurveyContext)
 
   function saveReply(answer) {

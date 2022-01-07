@@ -4,8 +4,9 @@ import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
 import ErrorPopup from "../../components/ErrorPopup"
 import { useFetch } from "../../utils/hooks"
-import { useTheme } from "../../utils/hooks"
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { selectTheme } from "../../../features/darkMode/theme"
 
 const FreelancesContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
     padding: 50px 25% 0 25%;
@@ -35,7 +36,7 @@ const CustomizedLink = styled(Link)`
 export default function Freelances() {
     const { data, isLoading, error } = useFetch(`http://localhost:8000/freelances`)
     const { freelancersList } = data
-    const { theme } = useTheme()
+    const theme = useSelector(selectTheme)
     return (
         error ? (
             <ErrorPopup />
