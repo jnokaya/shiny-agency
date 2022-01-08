@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
 import App from './app/App'
-import { store } from './app/store'
+import { default as store } from './app/store'
 
 ReactDOM.render(
   <Provider store={store}>

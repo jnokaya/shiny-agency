@@ -1,3 +1,4 @@
+import { createAction, createReducer } from '@reduxjs/toolkit'
 import { produce } from 'immer'
 
 //constants
@@ -22,18 +23,18 @@ export const API = {
 }
 
 //actions
-const freelancesFetching = () => ({ type: ACTIONS.FETCHING })
-const freelancesResolved = (data) => ({ type: ACTIONS.RESOLVED, payload: data })
-const freelancesRejected = (error) => ({ type: ACTIONS.REJECTED, payload: error })
+const fetchingFreelances = createAction(ACTIONS.FETCHING)
+const resolveFreelances = createAction(ACTIONS.RESOLVED, (data) => ({ payload: data }))
+const rejectFreelances = createAction(ACTIONS.REJECTED, (error) => ({ payload: error }))
 export const fetchFreelances = (store) => {
     const endpoint = setEndpoint(API.SERVER, '/freelances')
     try {
-        store.dispatch(freelancesFetching())
+        store.dispatch(fetchingFreelances())
         fetch(endpoint)
             .then(response => response.json())
-            .then(data => store.dispatch(freelancesResolved(data)))
+            .then(data => store.dispatch(resolveFreelances(data)))
     } catch (error) {
-        store.dispatch(freelancesRejected(error))
+        store.dispatch(rejectFreelances(error))
     }
 }
 export const setEndpoint = (server, uri) => `${server.PROTOCOL}://${server.DOMAIN}${server.PORT ? `:${server.PORT}` : ''}${uri}`
@@ -46,40 +47,37 @@ const initialState = {
 }
 
 //reducer
-export default function freelancesReducer(state = initialState, action) {
-    return produce(state, draft => {
+export default createReducer(initialState, builder => {
+    return builder.addCase(fetchingFreelances, (draft) => {
         const currentStatus = draft.status
-        switch (action.type) {
-            case ACTIONS.FETCHING:
-                // status state must be on void or error or resolved
-                // status is on void : set it to pending
-                if (currentStatus === STATUS[0])
-                    draft.status = STATUS[1]
-                // status is on error : reset error and set it to pending
-                else if (currentStatus === STATUS[3]) {
-                    draft.error = null
-                    draft.status = STATUS[1]
-                } //status is on resolved : set it to updating
-                else if (currentStatus === STATUS[2])
-                    draft.status = STATUS[4]
-                return
-            case ACTIONS.RESOLVED:
-                // status must be on pending or updating
-                if ([STATUS[1], STATUS[4]].indexOf(currentStatus) >= 0) {
-                    draft.status = STATUS[2]
-                    draft.data = action.payload
-                }
-                return
-            case ACTIONS.REJECTED:
-                // status must be on pending or updating
-                if ([STATUS[1], STATUS[4]].indexOf(currentStatus) >= 0) {
-                    draft.status = STATUS[2]
-                    draft.data = null
-                    draft.error = action.payload
-                }
-                return
-            default:
-                return
-        }
+        // status state must be on void or error or resolved
+        // status is on void : set it to pending
+        if (currentStatus === STATUS[0])
+            draft.status = STATUS[1]
+        // status is on error : reset error and set it to pending
+        else if (currentStatus === STATUS[3]) {
+            draft.error = null
+            draft.status = STATUS[1]
+        } //status is on resolved : set it to updating
+        else if (currentStatus === STATUS[2])
+            draft.status = STATUS[4]
+        return
     })
-}
+        .addCase(resolveFreelances, (draft, action) => {
+            // status must be on pending or updating
+            if ([STATUS[1], STATUS[4]].indexOf(draft.status) >= 0) {
+                draft.status = STATUS[2]
+                draft.data = action.payload
+            }
+            return
+        })
+        .addCase(rejectFreelances, (draft, action) => {
+            // status must be on pending or updating
+            if ([STATUS[1], STATUS[4]].indexOf(draft.status) >= 0) {
+                draft.status = STATUS[2]
+                draft.data = null
+                draft.error = action.payload
+            }
+            return
+        })
+})

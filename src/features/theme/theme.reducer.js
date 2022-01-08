@@ -1,3 +1,5 @@
+import { createAction, createReducer } from "@reduxjs/toolkit"
+
 //constants
 export const THEMES = {
     DARK: 'dark',
@@ -5,15 +7,10 @@ export const THEMES = {
 }
 
 // actions
-export const setTheme = (theme) => {
-    return { type: 'setTheme', payload: theme }
-}
+export const setTheme = createAction('setTheme')
 
-// reducer : the substate here is the theme (string)
-const themeReducer = (state = THEMES.LIGHT, action) => {
-    if (action.type === 'setTheme' && (action.payload || Object.values(THEMES).indexOf(action.payload) >= 0))
+export default createReducer('light', builder => {
+    return builder.addCase(setTheme, (state, action) => {
         return action.payload
-    return state
-}
-
-export default themeReducer
+    })
+})
