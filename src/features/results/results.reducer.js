@@ -1,17 +1,16 @@
-import { API, STATUS, setEndpoint } from "../freelances/freelances.reducer"
-import { createSlice } from "@reduxjs/toolkit"
-import { selectSurvey } from "../../common/utils/selector"
+import { createSlice } from "@reduxjs/toolkit";
+import { selectResults } from "../../common/utils/selector";
+import { API, setEndpoint, STATUS } from "../freelances/freelances.reducer";
 
-//slice
 const { actions, reducer } = createSlice({
-    name: 'survey',
+    name: 'results',
     initialState: {
         status: STATUS[0],
         data: null,
         error: null
     },
     reducers: {
-        fetchingSurvey: (draft, action) => {
+        fetching: (draft, action) => {
             const currentStatus = draft.status
             // status state must be on void or error or resolved
             // status is on void : set it to pending
@@ -26,7 +25,7 @@ const { actions, reducer } = createSlice({
                 draft.status = STATUS[4]
             return
         },
-        resolvingSurvey: (draft, action) => {
+        resolving: (draft, action) => {
             // status must be on pending or updating
             if ([STATUS[1], STATUS[4]].indexOf(draft.status) >= 0) {
                 draft.status = STATUS[2]
@@ -34,7 +33,7 @@ const { actions, reducer } = createSlice({
             }
             return
         },
-        rejectingSurvey: (draft, action) => {
+        rejecting: (draft, action) => {
             // status must be on pending or updating
             if ([STATUS[1], STATUS[4]].indexOf(draft.status) >= 0) {
                 draft.status = STATUS[2]
@@ -45,22 +44,23 @@ const { actions, reducer } = createSlice({
         }
     }
 })
-//actions
-const { fetchingSurvey, resolvingSurvey, rejectingSurvey } = actions
+
+const { fetching, resolving, rejecting } = actions
 //thunk
-export const fetchSurvey = (dispatch, getState) => {
-    const status = selectSurvey(getState()).status
-    if ([STATUS[1], STATUS[4]].indexOf(status) >= 0) return
-    const endpoint = setEndpoint(API.SERVER, '/survey')
-    dispatch(fetchingSurvey())
-    try {
-        fetch(endpoint)
-            .then(response => response.json())
-            .then(data => dispatch(resolvingSurvey(data)))
-    } catch (error) {
-        dispatch(rejectingSurvey(error))
+export function fetchResults(queryParams) {
+    return async (dispatch, getState) => {
+        const status = selectResults(getState()).status
+        if ([STATUS[1], STATUS[4]].indexOf(status) >= 0) return
+
+        const endpoint = setEndpoint(API.SERVER, `/results?${queryParams}`)
+        try {
+            dispatch(fetching())
+            const response = await fetch(endpoint)
+            const data = await response.json()
+            dispatch(resolving(data))
+        } catch (error) {
+            dispatch(rejecting(error))
+        }
     }
 }
-
-//reducer
 export default reducer

@@ -3,7 +3,6 @@ import { setupServer } from 'msw/node'
 import { waitFor, screen, waitForElementToBeRemoved } from '@testing-library/react'
 
 import Freelances from './'
-import { ThemeProvider } from '../../utils/context'
 import { render } from '../../utils/test'
 
 const freelancersMockedData = [
@@ -34,11 +33,11 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe('Freelances page', () => {
-    test('Should render without crash', () => {
+    it('Should render without crash', () => {
         render(<Freelances />)
         expect(screen.getByTestId('loader')).toBeTruthy()
     })
-    test('Should display freelancers names', async () => {
+    it('Should display freelancers names', async () => {
         render(<Freelances />)
         expect(screen.getByTestId('loader')).toBeTruthy()
         await waitForElementToBeRemoved(() => screen.getByTestId('loader'))

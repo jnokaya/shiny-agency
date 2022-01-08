@@ -2,13 +2,13 @@ import { useParams, Link } from "react-router-dom"
 import styled from "styled-components"
 import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
-import { useContext, useEffect } from "react"
-import { SurveyContext } from "../../utils/context"
+import { useEffect } from "react"
 import ErrorPopup from "../../components/ErrorPopup/ErrorPopup"
 import { useDispatch, useSelector } from "react-redux"
-import { selectSurvey, selectTheme } from "../../utils/selector"
+import { selectAnswers, selectSurvey, selectTheme } from "../../utils/selector"
 import { fetchSurvey } from "../../../features/survey/survey.reducer"
 import { STATUS } from "../../../features/freelances/freelances.reducer"
+import { set } from "../../../features/answers"
 
 const SurveyContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
   display: flex;
@@ -69,9 +69,9 @@ export default function Survey() {
   const theme = useSelector(selectTheme)
   const survey = useSelector(selectSurvey)
   const surveyData = survey.data?.surveyData
-  const { answers, saveAnswers } = useContext(SurveyContext)
+  const answers = useSelector(selectAnswers)
   function saveReply(answer) {
-    saveAnswers({ [questionNumber]: answer })
+    dispatch(set(questionNumber, answer))
   }
 
   const isLoading = [STATUS[0], STATUS[1]].indexOf(survey.status) >= 0

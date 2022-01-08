@@ -1,7 +1,10 @@
-import { default as themeReducer } from "../features/theme/theme.reducer";
+import { default as themeReducer } from "../features/theme/theme";
 import { default as freelancesReducer } from '../features/freelances/freelances.reducer'
 import { default as freelanceReducer } from '../features/freelance/freelance.reducer'
 import { default as surveyReducer } from '../features/survey/survey.reducer'
+import { default as answerReducer } from '../features/anwsers'
+import { default as resultsReducer } from '../features/results'
+
 import { configureStore } from '@reduxjs/toolkit'
 
 //debug tool
@@ -19,7 +22,9 @@ const store = configureStore({
         theme: themeReducer,
         freelances: freelancesReducer,
         freelance: freelanceReducer,
-        survey: surveyReducer
+        survey: surveyReducer,
+        answers: answerReducer,
+        results: resultsReducer
     }
 })
 

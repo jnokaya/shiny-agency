@@ -1,12 +1,12 @@
-import { useContext } from 'react'
-import { SurveyContext } from '../../utils/context'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import colors from '../../utils/style/colors'
-import { useFetch } from '../../utils/hooks'
 import { StyledLink, Loader } from '../../utils/style/Atoms'
-import { useSelector } from 'react-redux'
-import { selectTheme } from '../../utils/selector'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectAnswers, selectResults, selectTheme } from '../../utils/selector'
 import EmptyList from '../../components/EmptyList'
+import { fetchResults } from '../../../features/results/results.reducer'
+import { STATUS } from '../../../features/freelances/freelances.reducer'
 
 const ResultsContainer = styled.div`
   display: flex;
@@ -74,20 +74,23 @@ export function formatJobList(title, listLength, index) {
 
 function Results() {
     const theme = useSelector(selectTheme)
-    const { answers } = useContext(SurveyContext)
+    const answers = useSelector(selectAnswers)
     const fetchParams = formatQueryParams(answers)
-
-    const { data, isLoading, error } = useFetch(
-        `http://localhost:8000/results?${fetchParams}`
-    )
+    const results = useSelector(selectResults)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(fetchResults(fetchParams))
+    }, [dispatch])
+    const isLoading = [STATUS[0], STATUS[1], STATUS[4]].indexOf(results.status) >= 0
+    const error = results.status === STATUS[3]
 
     if (error) {
         return <span>Il y a un problème</span>
     }
 
-    const resultsData = data?.resultsData
-    if (resultsData?.length < 1) return (<EmptyList theme={theme} />)
-    return isLoading ? (
+    const resultsData = results.data?.resultsData
+    if (!isLoading && resultsData?.length < 1) return (<EmptyList theme={theme} />)
+    return isLoading || !resultsData ? (
         <LoaderWrapper>
             <Loader data-testid="loader" />
         </LoaderWrapper>

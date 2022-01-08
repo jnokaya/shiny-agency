@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import colors from '../../common/utils/style/colors'
-import { setTheme, THEMES } from './theme.reducer'
+import { set, THEMES } from './theme'
 import { selectTheme } from '../../common/utils/selector'
 
 const Button = styled.button`
@@ -16,7 +16,7 @@ export default function DarkModeButton() {
     const dispatch = useDispatch()
     return (
         <Button
-            onClick={() => { dispatch(setTheme(theme === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK)) }}
+            onClick={() => { dispatch(set(theme === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK)) }}
             $isDarkMode={theme === THEMES.LIGHT ? false : true}>
             Changer de mode à <strong>{theme === THEMES.LIGHT ? `nuit` : `jour`}</strong>
         </Button>

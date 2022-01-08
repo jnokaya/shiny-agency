@@ -3,7 +3,8 @@ import { ThemeProvider } from "../../utils/context"
 import { render, screen, fireEvent } from "@testing-library/react"
 
 describe(`Card`, () => {
-    test('Should use the picture in props', async () => {
+    
+    it('Should use the picture in props', async () => {
         render(
             <ThemeProvider>
                 <Card
@@ -19,7 +20,7 @@ describe(`Card`, () => {
         const cardTitle = screen.getByText(/Harry/i)
         expect(cardTitle.textContent).toBe("Harry Potter")
     })
-    test('Should add stars around title', async () => {
+    it('Should add stars around title', async () => {
         render(
             <ThemeProvider>
                 <Card
@@ -32,6 +33,6 @@ describe(`Card`, () => {
         const cardTitle = screen.getByText(/Harry/i)
         const parentNode = cardTitle.closest('div')
         fireEvent.click(parentNode)
-        expect(cardTitle.textContent).toBe('⭐️Harry Potter⭐️')
+        expect(cardTitle.textContent).toBe('Harry Potter')
     })
 })
