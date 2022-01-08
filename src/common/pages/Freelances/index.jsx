@@ -4,7 +4,7 @@ import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
 import ErrorPopup from "../../components/ErrorPopup"
 import { Link } from "react-router-dom"
-import { useSelector, useStore } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { selectFreelances, selectTheme } from "../../utils/selector"
 import { fetchFreelances, STATUS } from "../../../features/freelances/freelances.reducer"
 import { useEffect } from "react"
@@ -37,10 +37,10 @@ const CustomizedLink = styled(Link)`
 export default function Freelances() {
     // const { data, isLoading, error } = useFetch(`http://localhost:8000/freelances`)
     // const { freelancersList } = data
-    const store = useStore()
+    const dispatch = useDispatch()
     useEffect(() => {
-        fetchFreelances(store)
-    }, [store])
+        dispatch(fetchFreelances)
+    }, [dispatch])
     const theme = useSelector(selectTheme)
     const freelances = useSelector(selectFreelances)
     return (

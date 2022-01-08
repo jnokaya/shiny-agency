@@ -4,9 +4,8 @@ import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
 import { useContext, useEffect } from "react"
 import { SurveyContext } from "../../utils/context"
-import { useFetch } from '../../utils/hooks'
 import ErrorPopup from "../../components/ErrorPopup/ErrorPopup"
-import { useSelector, useStore } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { selectSurvey, selectTheme } from "../../utils/selector"
 import { fetchSurvey } from "../../../features/survey/survey.reducer"
 import { STATUS } from "../../../features/freelances/freelances.reducer"
@@ -63,10 +62,10 @@ const ReplyWrapper = styled.div`
 export default function Survey() {
   let { questionNumber } = useParams()
   questionNumber = Number.parseInt(questionNumber)
-  const store = useStore()
+  const dispatch = useDispatch()
   useEffect(() => {
-    fetchSurvey(store)
-  }, [store])
+    dispatch(fetchSurvey)
+  }, [dispatch])
   const theme = useSelector(selectTheme)
   const survey = useSelector(selectSurvey)
   const surveyData = survey.data?.surveyData

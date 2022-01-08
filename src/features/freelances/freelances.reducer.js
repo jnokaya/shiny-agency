@@ -1,5 +1,5 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import { produce } from 'immer'
+import { selectFreelances } from '../../common/utils/selector'
 
 //constants
 const ACTIONS = {
@@ -26,15 +26,17 @@ export const API = {
 const fetchingFreelances = createAction(ACTIONS.FETCHING)
 const resolveFreelances = createAction(ACTIONS.RESOLVED, (data) => ({ payload: data }))
 const rejectFreelances = createAction(ACTIONS.REJECTED, (error) => ({ payload: error }))
-export const fetchFreelances = (store) => {
+export const fetchFreelances = (dispatch, getState) => {
+    const status = selectFreelances(getState()).status
+    if ([STATUS[1], STATUS[4]].indexOf(status) >= 0) return
     const endpoint = setEndpoint(API.SERVER, '/freelances')
     try {
-        store.dispatch(fetchingFreelances())
+        dispatch(fetchingFreelances())
         fetch(endpoint)
             .then(response => response.json())
-            .then(data => store.dispatch(resolveFreelances(data)))
+            .then(data => dispatch(resolveFreelances(data)))
     } catch (error) {
-        store.dispatch(rejectFreelances(error))
+        dispatch(rejectFreelances(error))
     }
 }
 export const setEndpoint = (server, uri) => `${server.PROTOCOL}://${server.DOMAIN}${server.PORT ? `:${server.PORT}` : ''}${uri}`

@@ -3,7 +3,7 @@ import colors from '../../utils/style/colors'
 import ErrorPopup from '../../components/ErrorPopup'
 import { Loader } from '../../utils/style/Atoms'
 import { useEffect } from "react"
-import { useSelector, useStore } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { fetchFreelance } from "../../../features/freelance/freelance.reducer"
 import { selectFreelance, selectTheme } from "../../utils/selector"
@@ -18,7 +18,7 @@ const ProfileWrapper = styled.div`
   padding: 90px 0;
   margin: 0 90px;
   background-color: ${({ theme }) =>
-        theme === 'light' ? colors.backgroundLight : colors.backgroundDark};
+    theme === 'light' ? colors.backgroundLight : colors.backgroundDark};
 `
 
 const ProfileDetails = styled.div`
@@ -94,47 +94,47 @@ const Availability = styled.span`
 `
 
 export default function Profile() {
-    const store = useStore()
-    const queryId = useParams().id
-    useEffect(() => {
-        fetchFreelance(store, queryId)
-    }, [store, queryId])
-    const freelance = useSelector(selectFreelance(queryId))
-    const isLoading = [STATUS[0], STATUS[1], STATUS[4]].indexOf(freelance.status) >= 0 && surveyReducer.data
-    const error = freelance.status === STATUS[3]
-    const { picture, name, location, tjm, job, skills, available, id } = freelance.data ? freelance.data.freelanceData : {}
+  const dispatch = useDispatch()
+  const queryId = useParams().id
+  useEffect(() => {
+    dispatch(fetchFreelance(queryId))
+  }, [dispatch, queryId])
+  const freelance = useSelector(selectFreelance(queryId))
+  const isLoading = [STATUS[0], STATUS[1], STATUS[4]].indexOf(freelance.status) >= 0 && surveyReducer.data
+  const error = freelance.status === STATUS[3]
+  const { picture, name, location, tjm, job, skills, available, id } = freelance.data ? freelance.data.freelanceData : {}
 
-    const theme = useSelector(selectTheme)
-    return error ? (
-        <ErrorPopup />
+  const theme = useSelector(selectTheme)
+  return error ? (
+    <ErrorPopup />
+  ) : (
+    isLoading || !freelance.data ? (
+      <ProfileWrapper theme={theme}>
+        <Loader />
+      </ProfileWrapper>
     ) : (
-        isLoading || !freelance.data ? (
-            <ProfileWrapper theme={theme}>
-                <Loader />
-            </ProfileWrapper>
-        ) : (
-            <ProfileWrapper theme={theme}>
-                <Picture src={picture} alt={name} height={150} width={150} />
-                <ProfileDetails theme={theme}>
-                    <TitleWrapper>
-                        <Title>{name}</Title>
-                        <Location>{location}</Location>
-                    </TitleWrapper>
-                    <JobTitle>{job}</JobTitle>
-                    <SkillsWrapper>
-                        {skills &&
-                            skills.map((skill) => (
-                                <Skill key={`skill-${skill}-${id}`} theme={theme}>
-                                    {skill}
-                                </Skill>
-                            ))}
-                    </SkillsWrapper>
-                    <Availability available={available}>
-                        {available ? 'Disponible maintenant' : 'Indisponible'}
-                    </Availability>
-                    <Price>{tjm} € / jour</Price>
-                </ProfileDetails>
-            </ProfileWrapper>
-        )
+      <ProfileWrapper theme={theme}>
+        <Picture src={picture} alt={name} height={150} width={150} />
+        <ProfileDetails theme={theme}>
+          <TitleWrapper>
+            <Title>{name}</Title>
+            <Location>{location}</Location>
+          </TitleWrapper>
+          <JobTitle>{job}</JobTitle>
+          <SkillsWrapper>
+            {skills &&
+              skills.map((skill) => (
+                <Skill key={`skill-${skill}-${id}`} theme={theme}>
+                  {skill}
+                </Skill>
+              ))}
+          </SkillsWrapper>
+          <Availability available={available}>
+            {available ? 'Disponible maintenant' : 'Indisponible'}
+          </Availability>
+          <Price>{tjm} € / jour</Price>
+        </ProfileDetails>
+      </ProfileWrapper>
     )
+  )
 }

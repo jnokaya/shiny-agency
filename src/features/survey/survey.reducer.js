@@ -1,5 +1,6 @@
 import { API, STATUS, setEndpoint } from "../freelances/freelances.reducer"
 import { createAction, createReducer } from "@reduxjs/toolkit"
+import { selectSurvey } from "../../common/utils/selector"
 //constants
 const ACTIONS = {
     FETCHING: 'survey/fetching',
@@ -10,15 +11,18 @@ const ACTIONS = {
 const fetchingSurvey = createAction(ACTIONS.FETCHING)
 const resolveSurvey = createAction(ACTIONS.RESOLVE, data => ({ payload: data }))
 const rejectSurvey = createAction(ACTIONS.REJECT, error => ({ payload: error }))
-export const fetchSurvey = (store) => {
+// thunk
+export const fetchSurvey = (dispatch, getState) => {
+    const status = selectSurvey(getState()).status
+    if ([STATUS[1], STATUS[4]].indexOf(status) >= 0) return
     const endpoint = setEndpoint(API.SERVER, '/survey')
-    store.dispatch(fetchingSurvey())
+    dispatch(fetchingSurvey())
     try {
         fetch(endpoint)
             .then(response => response.json())
-            .then(data => store.dispatch(resolveSurvey(data)))
+            .then(data => dispatch(resolveSurvey(data)))
     } catch (error) {
-        store.dispatch(rejectSurvey(error))
+        dispatch(rejectSurvey(error))
     }
 }
 //reducer

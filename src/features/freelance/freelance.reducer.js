@@ -1,5 +1,5 @@
-import produce from "immer"
 import { createAction, createReducer } from "@reduxjs/toolkit"
+import { selectFreelance } from "../../common/utils/selector"
 import { STATUS, API, setEndpoint } from "../freelances/freelances.reducer"
 //constants
 const ACTIONS = {
@@ -11,15 +11,21 @@ const ACTIONS = {
 const fetchingFreelance = createAction(ACTIONS.FETCHING, (freelanceId) => ({ payload: { freelanceId } }))
 const resolveFreelance = createAction(ACTIONS.RESOLVED, (freelanceId, data) => ({ payload: { freelanceId, data } }))
 const rejectFreelance = createAction(ACTIONS.REJECTED, (freelanceId, error) => ({ payload: { freelanceId, error } }))
-export const fetchFreelance = (store, queryId) => {
-    const endpoint = setEndpoint(API.SERVER, `/freelance?id=${queryId}`)
-    store.dispatch(fetchingFreelance(queryId))
-    try {
-        fetch(endpoint)
-            .then(response => response.json())
-            .then(data => store.dispatch(resolveFreelance(queryId, data)))
-    } catch (error) {
-        store.dispatch(rejectFreelance(queryId, error))
+// thunk or functions that returns a thunk
+export const fetchFreelance = (queryId) => {
+    return (dispatch, getState) => {
+        const status = selectFreelance(getState()).status
+        if ([STATUS[1], STATUS[4]].indexOf(status) >= 0) return
+
+        const endpoint = setEndpoint(API.SERVER, `/freelance?id=${queryId}`)
+        dispatch(fetchingFreelance(queryId))
+        try {
+            fetch(endpoint)
+                .then(response => response.json())
+                .then(data => dispatch(resolveFreelance(queryId, data)))
+        } catch (error) {
+            dispatch(rejectFreelance(queryId, error))
+        }
     }
 }
 //initial state
