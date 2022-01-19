@@ -4,10 +4,9 @@ import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
 import ErrorPopup from "../../components/ErrorPopup"
 import { Link } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
-import { selectFreelances, selectTheme } from "../../utils/selector"
-import { fetchFreelances, STATUS } from "../../../features/freelances/freelances.reducer"
-import { useEffect } from "react"
+import { useSelector } from "react-redux"
+import { selectTheme } from "../../utils/selector"
+import { useQuery } from 'react-query'
 
 const FreelancesContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
     padding: 50px 25% 0 25%;
@@ -35,31 +34,30 @@ const CustomizedLink = styled(Link)`
     height: -webkit-fill-available;
 `
 export default function Freelances() {
-    // const { data, isLoading, error } = useFetch(`http://localhost:8000/freelances`)
-    // const { freelancersList } = data
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(fetchFreelances)
-    }, [dispatch])
     const theme = useSelector(selectTheme)
-    const freelances = useSelector(selectFreelances)
+    const { data, isLoading, error } = useQuery('freelances', async () => {
+        const response = await fetch('http://localhost:8000/freelances')
+        const data = await response.json()
+        return data
+    })
+    const freelancersList = data?.freelancersList
     return (
-        freelances.status === STATUS[3] ? (
+        error ? (
             <ErrorPopup />
         ) : (
             <FreelancesContainer>
                 <h1>Trouvez votre prestataire</h1 >
                 <StyledH2>Chez Shiny nous réunissons les meilleurs profils pour vous</StyledH2>
                 {
-                    [STATUS[0] || STATUS[1]].indexOf(freelances.status) >= 0 || !freelances || !freelances.data ? (
+                    isLoading ? (
                         <Loader data-testid="loader" />
                     ) : (
                         <CardsContainer>
-                            {freelances && freelances.data ? freelances.data.freelancersList.map(({ name, job, picture, id }, index) => (
+                            {freelancersList.map(({ name, job, picture, id }, index) => (
                                 <CustomizedLink to={`/profile/${id}`} key={`${name}-${index}`}>
                                     <Card label={job} picture={picture} title={name} theme={theme} />
                                 </CustomizedLink>
-                            )) : (<div></div>)}
+                            ))}
                         </CardsContainer>
                     )
                 }

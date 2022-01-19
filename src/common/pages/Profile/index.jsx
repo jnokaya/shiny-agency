@@ -2,13 +2,10 @@ import styled from 'styled-components'
 import colors from '../../utils/style/colors'
 import ErrorPopup from '../../components/ErrorPopup'
 import { Loader } from '../../utils/style/Atoms'
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { fetchFreelance } from "../../../features/freelance/freelance.reducer"
-import { selectFreelance, selectTheme } from "../../utils/selector"
-import { STATUS } from '../../../features/freelances/freelances.reducer'
-import surveyReducer from '../../../features/survey/survey.reducer'
+import { selectTheme } from "../../utils/selector"
+import { useQuery } from 'react-query'
 
 const ProfileWrapper = styled.div`
   display: flex;
@@ -94,21 +91,20 @@ const Availability = styled.span`
 `
 
 export default function Profile() {
-  const dispatch = useDispatch()
   const queryId = useParams().id
-  useEffect(() => {
-    dispatch(fetchFreelance(queryId))
-  }, [dispatch, queryId])
-  const freelance = useSelector(selectFreelance(queryId))
-  const isLoading = [STATUS[0], STATUS[1], STATUS[4]].indexOf(freelance.status) >= 0 && surveyReducer.data
-  const error = freelance.status === STATUS[3]
-  const { picture, name, location, tjm, job, skills, available, id } = freelance.data ? freelance.data.freelanceData : {}
+  const { data, isLoading, error } = useQuery(['freelances', queryId], async () => {
+    const response = await fetch(`http://localhost:8000/freelance?id=${queryId}`)
+    const data = await response.json()
+    return data
+  })
+  const freelancer = data?.freelanceData
+  const { picture, name, location, tjm, job, skills, available, id } = freelancer ? freelancer : {}
 
   const theme = useSelector(selectTheme)
   return error ? (
     <ErrorPopup />
   ) : (
-    isLoading || !freelance.data ? (
+    isLoading ? (
       <ProfileWrapper theme={theme}>
         <Loader />
       </ProfileWrapper>

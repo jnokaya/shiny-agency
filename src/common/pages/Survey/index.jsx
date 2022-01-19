@@ -2,13 +2,11 @@ import { useParams, Link } from "react-router-dom"
 import styled from "styled-components"
 import colors from "../../utils/style/colors"
 import { Loader } from "../../utils/style/Atoms"
-import { useEffect } from "react"
 import ErrorPopup from "../../components/ErrorPopup/ErrorPopup"
 import { useDispatch, useSelector } from "react-redux"
-import { selectAnswers, selectSurvey, selectTheme } from "../../utils/selector"
-import { fetchSurvey } from "../../../features/survey/survey.reducer"
-import { STATUS } from "../../../features/freelances/freelances.reducer"
+import { selectAnswers, selectTheme } from "../../utils/selector"
 import { set } from "../../../features/answers"
+import { useQuery } from 'react-query'
 
 const SurveyContainer = styled.div.attrs(props => ({ className: 'page borderBoxSizing' }))`
   display: flex;
@@ -63,19 +61,17 @@ export default function Survey() {
   let { questionNumber } = useParams()
   questionNumber = Number.parseInt(questionNumber)
   const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(fetchSurvey)
-  }, [dispatch])
   const theme = useSelector(selectTheme)
-  const survey = useSelector(selectSurvey)
-  const surveyData = survey.data?.surveyData
+  const { data, isLoading, error } = useQuery('survey', async () => {
+    const response = await fetch('http://localhost:8000/survey')
+    const data = await response.json()
+    return data
+  })
+  const surveyData = data?.surveyData
   const answers = useSelector(selectAnswers)
   function saveReply(answer) {
     dispatch(set(questionNumber, answer))
   }
-
-  const isLoading = [STATUS[0], STATUS[1]].indexOf(survey.status) >= 0
-  const error = survey.status === STATUS[3]
   if (error) return (<ErrorPopup />)
   return (
     <SurveyContainer>

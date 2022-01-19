@@ -80,7 +80,7 @@ function Results() {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(fetchResults(fetchParams))
-    }, [dispatch])
+    }, [dispatch, fetchParams])
     const isLoading = [STATUS[0], STATUS[1], STATUS[4]].indexOf(results.status) >= 0
     const error = results.status === STATUS[3]
 
